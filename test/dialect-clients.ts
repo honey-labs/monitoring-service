@@ -16,7 +16,7 @@ import { DialectAccount } from '@dialectlabs/web3/lib/es';
 const MONITORING_SERVICE_PUBLIC_KEY = process.env
   .MONITORING_SERVICE_PUBLIC_KEY as string;
 
-const NETWORK_NAME = 'localnet';
+const NETWORK_NAME = 'devnet';
 const connection = new web3.Connection(
   programs[NETWORK_NAME].clusterAddress,
   'recent',
@@ -46,8 +46,9 @@ const createClients = async (n: number): Promise<void> => {
     new anchor.web3.PublicKey(DIALECT_PROGRAM_ADDRESS),
   );
 
+  console.log('funding keypairs');
   await fundKeypairs(program, clients);
-
+  console.log('funded keypairs')
   let dialectAccountsByPk: Record<
     string,
     { owner: Keypair; dialectAccount: DialectAccount }
@@ -153,7 +154,7 @@ const createClients = async (n: number): Promise<void> => {
 const fundKeypairs = async (
   program: anchor.Program,
   keypairs: web3.Keypair[],
-  amount: number | undefined = 10 * web3.LAMPORTS_PER_SOL,
+  amount: number | undefined = 2 * web3.LAMPORTS_PER_SOL,
 ): Promise<void> => {
   await Promise.all(
     keypairs.map(async (keypair) => {
@@ -162,6 +163,7 @@ const fundKeypairs = async (
           keypair.publicKey,
           amount,
         );
+
       await program.provider.connection.confirmTransaction(
         fromAirdropSignature,
       );
@@ -170,7 +172,7 @@ const fundKeypairs = async (
 };
 
 const main = async (): Promise<void> => {
-  await createClients(2);
+  await createClients(1);
 };
 
 main();

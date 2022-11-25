@@ -33,3 +33,5 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+monitoring-service-dev-local-key.json
+monitoring-service-dev-local-key.pub

@@ -9,11 +9,12 @@ export abstract class DialectConnection {
 
   static initialize(): DialectConnection {
     const PRIVATE_KEY = process.env.PRIVATE_KEY;
+    console.log('private key', PRIVATE_KEY);
     const keypair: Keypair = Keypair.fromSecretKey(
       new Uint8Array(JSON.parse(PRIVATE_KEY as string)),
     );
     const wallet = Wallet_.embedded(keypair.secretKey);
-    const RPC_URL = process.env.RPC_URL || 'http://localhost:8899';
+    const RPC_URL = process.env.RPC_URL || 'https://api.devnet.solana.com';
     console.log('RPC url', RPC_URL);
     const dialectConnection = new Connection(RPC_URL, 'recent');
     const dialectProvider = new Provider(
@@ -23,7 +24,7 @@ export abstract class DialectConnection {
     );
     // @ts-ignore
     const NETWORK_NAME: 'mainnet-beta' | 'devnet' | 'localnet' =
-      process.env.NETWORK_NAME || 'localnet';
+      process.env.NETWORK_NAME || 'devnet';
 
     const network_key: 'mainnet' | 'devnet' | 'localnet' =
       NETWORK_NAME === 'mainnet-beta' ? 'mainnet' : NETWORK_NAME;
